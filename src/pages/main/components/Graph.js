@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { useGetDate } from '../../../hooks/useGetDateTime';
 import Loading from '../../../components/Loading';
 ChartJs.register(LineElement, PointElement, CategoryScale, LinearScale, Tooltip, Legend, Filler);
-const Graph = ({params}) => {
+const Graph = ({params, setters}) => {
     const [aktualData, setAktualData] = useState([]);
     const [prediksiData, setPrediksiData] = useState([]);
 
@@ -16,13 +16,13 @@ const Graph = ({params}) => {
     const { user } = useAuthContext();
 
     const data = {
-        labels: aktualData ? (aktualData.map(item => {return getTime(item.tanggal)})) : [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23],
+        labels: prediksiData ? (prediksiData.map(item => {return getTime(item.tanggal)})) : [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23],
         datasets: [
             {
                 label: "Aktual",
                 data: aktualData.map(item => { return item.nilai}),
                 borderColor: 'rgb(35,211,237)',
-                pointRadius: 2,
+                pointRadius: 3,
                 pointHoverRadius: 7,
                 pointHoverBackgroundColor: 'black',
                 pointHoverBorderColor: 'rgba(0,0,0,0.3)',
@@ -43,9 +43,9 @@ const Graph = ({params}) => {
             },
             {
                 label: "Prediksi",
-                data: prediksiData,
+                data: prediksiData.map(item => { return item.nilai}),
                 borderColor: 'rgb(247,91,2)',
-                pointRadius: 0,
+                pointRadius: 3,
                 pointHoverRadius: 7,
                 pointHoverBackgroundColor: 'black',
                 pointHoverBorderColor: 'rgba(0,0,0,0.3)',
@@ -128,9 +128,12 @@ const Graph = ({params}) => {
 
     const handleLoadChartData = async () => {
         const res = await getChartData(user.authorization.token, model, daerah, periode);
-        setAktualData(res.data.aktual);
-        console.log();
-        setPrediksiData(res.data.prediksi);
+        if(res) {
+            setAktualData(res.data.aktual);
+            setPrediksiData(res.data.prediksi);
+            setters.setAktualAir(res.data.aktual[res.data.aktual.length-1].nilai)
+            setters.setPrediksiAir(res.data.prediksi[res.data.prediksi.length-1].nilai)
+        }
     }
 
     useEffect(() => {

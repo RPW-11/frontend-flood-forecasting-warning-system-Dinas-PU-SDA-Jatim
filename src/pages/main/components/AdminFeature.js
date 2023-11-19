@@ -2,7 +2,7 @@ import { IoWarningOutline } from "react-icons/io5";
 import { MdErrorOutline } from "react-icons/md";
 import { useEffect, useState } from "react";
 import { useGetData } from "../../../hooks/useGetData";
-const AdminFeature = ({user, currentStasiun}) => {
+const AdminFeature = ({user, currentStasiun, setLimitAir}) => {
     const adminRole = 2
     const [currentFeature, setCurrentFeature] = useState(null)
     const [limitSiaga, setLimitSiaga] = useState(1)
@@ -21,6 +21,7 @@ const AdminFeature = ({user, currentStasiun}) => {
             setStationInformation(res.data)
             setLimitAwas(res.data.batas_air_awas)
             setLimitSiaga(res.data.batas_air_siaga)
+            setLimitAir([res.data.batas_air_siaga, res.data.batas_air_awas])
         }
         console.log(res);
         setCurrentFeature(null)
@@ -38,12 +39,13 @@ const AdminFeature = ({user, currentStasiun}) => {
     useEffect(() => {
         const loadData = async () => {
             const res = await getStasiunLimitAir(user.authorization.token)
-            console.log(res);
-            const statiunData = res.data.find((item) => item.nama_pos === currentStasiun.toLowerCase())
-            
-            setLimitAwas(statiunData.batas_air_awas)
-            setLimitSiaga(statiunData.batas_air_siaga)
-            setStationInformation(statiunData)
+            if(res) {
+                const statiunData = res.data.find((item) => item.nama_pos === currentStasiun.toLowerCase())
+                setLimitAir ([statiunData.batas_air_siaga, statiunData.batas_air_awas])
+                setLimitAwas(statiunData.batas_air_awas)
+                setLimitSiaga(statiunData.batas_air_siaga)
+                setStationInformation(statiunData)
+            }
         }
         loadData()
     }, [currentStasiun])

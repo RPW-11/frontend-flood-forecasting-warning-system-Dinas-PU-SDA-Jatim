@@ -24,7 +24,7 @@ const Map = () => {
             <p className="text-3xl font-semibold text-left pt-3 pb-7">Lokasi Stasiun yang ada</p>
             <div className="w-full h-[600px]">
                 <GoogleMapReact
-                    bootstrapURLKeys={{ key: "AIzaSyCXm0QjogvgD_vQJUmQ0OmviFTDVoaVCDM" }}
+                    bootstrapURLKeys={{ key: process.env.REACT_APP_MAP_API_KEY }}
                     defaultCenter={defaultProps.center}
                     defaultZoom={defaultProps.zoom}
                     yesIWantToUseGoogleMapApiInternals

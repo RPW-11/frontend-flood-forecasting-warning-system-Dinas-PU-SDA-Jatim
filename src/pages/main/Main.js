@@ -21,10 +21,20 @@ const Main = () => {
     const [stasiun, setStasiun] = useState('Dhompo')
     const [isStation, setIsStation] = useState(false)
     const [isModel, setIsModel] = useState(false)
+
+    const [aktualAir, setAktualAir] = useState(1)
+    const [prediksiAir, setPrediksiAir] = useState(1)
+    const [limitAir, setLimitAir] = useState([null, null])
+
     
     const { user } = useAuthContext();
     const { getDayName } = useGetDate();
 
+    console.log("air pred", prediksiAir);
+
+    const getStatus = (value) => {
+        return value <= limitAir[0] ? "Aman" : value > limitAir[0] && value < limitAir[1] ? "Siaga" : value >= limitAir[1] ? "Bahaya" : "Undefined"
+    }
 
     const stateHandler = (val) => {
         setPeriod(val)
@@ -60,7 +70,7 @@ const Main = () => {
                     </div>
                     <p className="text-zinc-500 text-sm">Selamat memonitor air sungai!</p>
                 </div>
-                <div className="rounded-md text-sm border shadow px-3 py-1 ml-7 w-[150px]">
+                <div className="rounded-md text-sm border shadow px-3 py-1 ml-7 min-w-[150px]">
                     <p className="text-zinc-500 text-xs">Tanggal</p>
                     <p className="font-medium">{getDayName(currentDate) + ', ' + currentDate.toISOString().slice(0, 10)}</p>
                 </div>
@@ -72,14 +82,14 @@ const Main = () => {
                             <div className="rounded-full p-2 border border-neutral-900">
                                 <IoStatsChart />
                             </div>
-                            <p className="font-semibold ml-3">Perkembangan Air Sungai {stasiun}</p>
+                            <p className="font-semibold ml-3">Perkembangan Air Sungai {stasiun} Aktual</p>
                         </div>
                         <p className="font-light text-xs text-left mt-3">Informasi kondisi sungai saat ini</p>
                         <div className="flex mt-3 text-left ">
                             <div className="flex items-center">
-                                <Status value={"Aman"}/>
+                                <Status value={getStatus(aktualAir)}/>
                                 <div className="ml-3"><ElevasiMukaAir value={60}/></div>
-                                <div className="ml-3"><LevelMukaAir value={17.5}/></div>
+                                <div className="ml-3"><LevelMukaAir value={aktualAir}/></div>
                             </div>
                         </div>
                         <div>
@@ -140,7 +150,7 @@ const Main = () => {
                                 </ul>}
                             </div> 
                         </div>
-                        {user && <AdminFeature user={user} currentStasiun={stasiun}/>}
+                        {user && <AdminFeature user={user} currentStasiun={stasiun} setLimitAir={setLimitAir}/>}
                     </div>
                 </div>
                 <div className="row-span-2 my-3 border rounded-md p-5 shadow">
@@ -154,14 +164,14 @@ const Main = () => {
                         <p className="font-light text-xs text-left mt-3">Informasi kondisi sungai yang akan datang berdasarkan konfigurasi prediksi.</p>
                         <div className="flex mt-3 text-left ">
                             <div className="flex items-center">
-                                <Status value={"Siaga"}/>
+                                <Status value={getStatus(prediksiAir)}/>
                                 <div className="ml-3"><ElevasiMukaAir value={12.5}/></div>
-                                <div className="ml-3"><LevelMukaAir value={11.5}/></div>
+                                <div className="ml-3"><LevelMukaAir value={prediksiAir}/></div>
                             </div>
                         </div>
                     </div>
                     <div className="">
-                        <Graph params={getChartParams()}/>
+                        <Graph params={getChartParams()} setters={{setAktualAir, setPrediksiAir}}/>
                     </div>
                 </div>
             </div>
