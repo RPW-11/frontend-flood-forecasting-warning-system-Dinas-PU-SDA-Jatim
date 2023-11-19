@@ -2,6 +2,7 @@ import { useGetDate } from "../../../hooks/useGetDateTime";
 import { useEffect, useState } from "react";
 import { useGetData } from "../../../hooks/useGetData";
 import {BsChevronLeft, BsChevronRight, BsFillCalendarDayFill, BsFillClockFill, BsGraphUp} from "react-icons/bs"
+import Loading from "../../../components/Loading";
 
 const SensorTable = ({user}) => {
     const buttonStyle = {
@@ -26,7 +27,7 @@ const SensorTable = ({user}) => {
 
     }, [pageIndex])
 
-    if(sensorData)
+    if(sensorData){
         return ( 
             <div className="my-8">
                 <div className="rounded-lg min-w-[1000px] border grid grid-cols-12 overflow-hidden text-sm bg-white shadow">
@@ -65,6 +66,20 @@ const SensorTable = ({user}) => {
                 </div>
             </div>
         );
+    }
+    else if (isLoading) {
+        return (
+            <Loading size={'30px'}/>
+        )
+    }
+    else if (error) {
+        return (
+            <div className="text-red-700">
+                {error.response.data.message}
+            </div>
+        )
+    }
+    
 }
  
 export default SensorTable;

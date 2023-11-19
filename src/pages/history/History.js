@@ -7,7 +7,7 @@ const History = () => {
     const [isClicking, setIsClicking] = useState(false);
     const handleClick = (cb) => {
         cb();
-        setIsClicking(false)
+        setIsClicking(false);
     }
 
     const {user} = useAuthContext();

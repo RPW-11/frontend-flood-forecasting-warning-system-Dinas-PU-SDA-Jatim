@@ -4,29 +4,32 @@ ChartJs.register(LineElement, PointElement, CategoryScale, LinearScale, Tooltip,
 
 const Graph2 = () => {
     const data = {
-        labels: [0,1,2,3,4],
-        datasets: [{
-            label: "Elevasi Muka Air (m)",
-            data: Array.from({length: 5}, () => Math.floor(Math.random() * 40)),
-            borderColor: 'rgba(28,78,216,1)',
-            pointHoverRadius: 7,
-            pointHoverBackgroundColor: 'black',
-            pointHoverBorderColor: 'rgba(0,0,0,0.3)',
-            pointHoverBorderWidth: 10,
-            backgroundColor: (context) => {
-                if(!context.chart.chartArea){
-                    return;
-                }
-                const {ctx, data, chartArea: {top, bottom}} = context.chart;
-                const gradientBg = ctx.createLinearGradient(0, top, 0, bottom);
-                gradientBg.addColorStop(0, 'rgba(28,78,216,1)');
-                gradientBg.addColorStop(0.3, 'rgba(28,78,216,.5)');
-                gradientBg.addColorStop(1, 'rgba(28,78,216,0.2)')
-                return gradientBg;
-            },
-            tension: 0.1,
-            fill: true,
-        }]
+        labels: [0,1],
+        datasets: [
+            {
+                label: "Elevasi Muka Air (m)",
+                data: [60, 60],
+                borderColor: 'rgb(35,211,237)',
+                pointRadius: 0,
+                pointHoverRadius: 5,
+                pointHoverBackgroundColor: 'black',
+                pointHoverBorderColor: 'rgba(0,0,0,0.3)',
+                pointHoverBorderWidth: 5,
+                backgroundColor: (context) => {
+                    if(!context.chart.chartArea){
+                        return;
+                    }
+                    const {ctx, data, chartArea: {top, bottom}} = context.chart;
+                    const gradientBg = ctx.createLinearGradient(0, top, 0, bottom);
+                    gradientBg.addColorStop(0, 'rgba(167,231,255,1)');
+                    gradientBg.addColorStop(0.3, 'rgba(167,231,255, .7)');
+                    gradientBg.addColorStop(1, 'rgba(167,231,255, .2)')
+                    return gradientBg;
+                },
+                tension: 0.1,
+                fill: true,
+            }
+        ]
     }
 
     const options = {
@@ -38,7 +41,6 @@ const Graph2 = () => {
             legend: {
                 labels:{
                     boxHeight: 1,
-                    font: { family: "'Poppins', 'sans-serif'"}
                 },
                 align: 'end'
             },
@@ -54,30 +56,29 @@ const Graph2 = () => {
         },
         scales: {
             y: {
-                suggestedMax: Math.max(...data.datasets[0].data) + 10,
+                suggestedMax: Math.max(...data.datasets[0].data),
                 suggestedMin: 0,
                 grid: {
-                    color: 'rgba(0,0,0,.05)',
+                    display: false
                 },
                 ticks: {
-                    stepSize: 20,
-                    font: { family: "'Poppins', 'sans-serif'"},
-                    tickBorderDash: [8, 4],
+                    stepSize: 80,
                 }
             },
             x: {
+                border: {display: false},
                 grid: {
                     display: false,
                 },
                 ticks: {
-                    font: { family: "'Poppins', 'sans-serif'"}
+                    display: false
                 }
             }
         }
     }
     return ( 
         <div className="">
-            <div className="h-[160px]">
+            <div className="h-[100px]">
                 <Line data={data} options={options}></Line>
             </div>
         </div>

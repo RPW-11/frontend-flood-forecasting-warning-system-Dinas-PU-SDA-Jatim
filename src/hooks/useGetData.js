@@ -38,6 +38,40 @@ export const useGetData = () => {
         }
     }
 
-    return {getSensorHistory, getPredictionHistory, isLoading, error}
+    const getStasiunLimitAir = async (token) => {
+        setIsLoading(true)
+        setError(null)
+        try {
+            const res = await api.get(`/getAllStasiunAir`, {
+                headers: {Authorization: `Bearer ${token}`}
+            });
+            setIsLoading(false)
+            return res.data
+        } catch (error) {
+            setError(error)
+            setIsLoading(false)
+            console.log(error)
+            return null;
+        }
+    }
+
+    const updateLimitAir = async (token, body) => {
+        setIsLoading(true)
+        setError(null)
+        try {
+            const res = await api.patch(`/updateBatasAirStasiun`, body, {
+                headers: {Authorization: `Bearer ${token}`}
+            });
+            setIsLoading(false)
+            return res.data
+        } catch (error) {
+            setError(error)
+            setIsLoading(false)
+            console.log(error)
+            return null;
+        }
+    }
+
+    return {getSensorHistory, getPredictionHistory, getStasiunLimitAir, updateLimitAir, isLoading, error}
 
 }

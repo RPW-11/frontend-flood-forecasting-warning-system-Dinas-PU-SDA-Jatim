@@ -8,7 +8,8 @@ import { useLogout } from "../../hooks/useLogout";
 const Navbar = () => {
     const [states, setStates] = useState([true, false, false])
     const location = useLocation();
-    const styleIncative = 'text-zinc-500'
+    const styleIncative = 'text-zinc-500 font-medium hover:bg-zinc-200'
+    const styleActive = 'text-black font-medium bg-zinc-200'
     const navigate = useNavigate();
     const {user} = useAuthContext();
     const {logout} = useLogout();
@@ -33,16 +34,13 @@ const Navbar = () => {
     }, [location])
 
     return ( 
-        <div className="h-screen w-[250px] p-7 bg-neutral-900 text-white flex flex-col">
-            <div className="flex-initial text-left">
-                <p className="font-light">SELAMAT DATANG</p>
-                <p className="font-semibold my-2">{user && user.user.nama}</p>
-            </div>
-            <div className="flex flex-col justify-between flex-auto">
-                <ul className="py-5 mt-[70px]">
-                    <li onClick={() => stateHandler('/',0)} className={`${!states[0] && styleIncative} flex items-center w-full cursor-pointer`}><AiFillHome className="mr-2"/>Utama</li>
-                    <li onClick={() => stateHandler('/dashboard',1)} className={`${!states[1] && styleIncative} flex items-center w-full cursor-pointer`}><LuLayoutDashboard className="mr-2"/>Dashboard</li>
-                    <li onClick={() => stateHandler('/history',2)} className={`${!states[2] && styleIncative} flex items-center w-full cursor-pointer`}><AiOutlineHistory className="mr-2"/>History</li>
+        <div className="h-screen w-[250px] py-7 px-5 bg-white flex flex-col border-r">
+            <div className="flex flex-col flex-auto">
+                <p className="text-zinc-500 font-semibold text-xs text-left">MENU UTAMA</p>
+                <ul className="py-3">
+                    <li onClick={() => stateHandler('/',0)} className={`${!states[0] ? styleIncative : styleActive} flex items-center w-full cursor-pointer px-3 py-1 rounded-lg my-1 `}><AiFillHome className="mr-2"/>Utama</li>
+                    <li onClick={() => stateHandler('/dashboard',1)} className={`${!states[1] ? styleIncative : styleActive} flex items-center w-full cursor-pointer px-3 py-1 rounded-lg my-1 `}><LuLayoutDashboard className="mr-2"/>Dashboard</li>
+                    <li onClick={() => stateHandler('/history',2)} className={`${!states[2] ? styleIncative : styleActive} flex items-center w-full cursor-pointer px-3 py-1 rounded-lg my-1 `}><AiOutlineHistory className="mr-2"/>History</li>
                 </ul>
                 <div className="">
                     {user && <button onClick={handleLogout} className="rounded-md text-zinc-300 w-full bg-red-700 hover:text-white font-medium text-sm py-1">LOGOUT</button>}

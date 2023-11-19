@@ -52,7 +52,7 @@ const Auth = () => {
                             <input onChange={(e) => setPassword(e.target.value)} value={password} type={isHiding ? "password" : "text"} placeholder="Masukkan password" className="focus:border-neutral-900 outline-none text-sm border-b w-full py-1"/>
                             {isHiding ? <AiFillEye onClick={() => setIsHiding(false)} className="absolute top-2 bottom-0 right-1 cursor-pointer"/> : <AiFillEyeInvisible onClick={() => setIsHiding(true)} className="absolute top-2 bottom-0 right-1 cursor-pointer"/>}
                         </div>
-                        <button className="p-2 font-bold rounded-full text-center bg-neutral-900 text-white w-full mt-5 m-auto">{isLoading ? <Loading/> : isSigningup ? 'SIGN UP' : 'LOGIN'}</button>
+                        <button className="p-2 font-bold rounded-full text-center bg-neutral-900 text-white w-full mt-5 m-auto">{isLoading ? <Loading size={'30px'}/> : isSigningup ? 'SIGN UP' : 'LOGIN'}</button>
                     </form>
                     <p className="text-center text-sm">{isSigningup ? 'Sudah memiliki akun? Login' : 'Belum memiliki akun? Daftar'} <s onClick={() => setIsSigningup(!isSigningup)} className="cursor-pointer no-underline font-bold hover:underline">disini</s></p>
                 </div>

@@ -22,7 +22,7 @@ const Wrapper = ({child}) => {
   return (
     <div className="App font-sans flex w-screen h-screen overflow-auto font-sans">
       <Navbar/>
-      <div className="p-7 w-full">
+      <div className="p-5 w-full">
         {child}
       </div>
     </div>

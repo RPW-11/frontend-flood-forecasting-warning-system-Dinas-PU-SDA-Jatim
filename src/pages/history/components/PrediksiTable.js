@@ -1,7 +1,8 @@
 import { useGetDate } from "../../../hooks/useGetDateTime";
 import { useEffect, useState } from "react";
 import { useGetData } from "../../../hooks/useGetData";
-import {BsChevronLeft, BsChevronRight, BsFillCalendarDayFill, BsFillClockFill, BsGraphUp} from "react-icons/bs"
+import Loading from "../../../components/Loading";
+import {BsChevronLeft, BsChevronRight, BsFillCalendarDayFill, BsFillClockFill} from "react-icons/bs"
 
 const PrediksiTable = ({user}) => {
     const buttonStyle = {
@@ -16,9 +17,11 @@ const PrediksiTable = ({user}) => {
     
     const handleLoadPredictionHistory = async () => {
         const data = await getPredictionHistory(user.authorization.token, pageIndex * 10, 10);
-        setPrediksi(data.data.history);
-        setTotalLength(data.data.total_count)
-        console.log(data);
+        if(data) {
+            setPrediksi(data.data.history);
+            setTotalLength(data.data.total_count);
+            console.log(data);
+        }
     }
 
     useEffect(() => {
@@ -26,7 +29,7 @@ const PrediksiTable = ({user}) => {
 
     }, [pageIndex])
 
-    if(prediksi)
+    if(prediksi){
         return ( 
             <div className="my-8">
                 <div className="rounded-lg min-w-[1000px] border grid grid-cols-12 overflow-hidden text-sm bg-white shadow">
@@ -44,8 +47,8 @@ const PrediksiTable = ({user}) => {
                         prediksi.map((item, i) => (
                             <div className="col-span-12 grid grid-cols-12" key={i}>
                                 <div className="col-span-1 px-5 text-left border-t py-2">{item.id}</div>
-                                <div className="col-span-2 px-5 text-left border-t py-2">{getDate(item.tanggal)}</div>
-                                <div className="col-span-1 px-5 text-left border-t py-2">{getTime(item.tanggal)}</div>
+                                <div className="col-span-2 px-5 text-left border-t py-2">{getDate(item.predicted_for_time)}</div>
+                                <div className="col-span-1 px-5 text-left border-t py-2">{getTime(item.predicted_for_time)}</div>
                                 <div className="col-span-2 px-5 text-left border-t py-2">{item.prediksi_level_muka_air_purwodadi_lstm}</div>
                                 <div className="col-span-1 px-5 text-left border-t py-2">{item.prediksi_level_muka_air_purwodadi_gru}</div>
                                 <div className="col-span-1 px-5 text-left border-t py-2">{item.prediksi_level_muka_air_purwodadi_tcn}</div>
@@ -56,7 +59,7 @@ const PrediksiTable = ({user}) => {
                         ))
                     }
 
-                    <div className="col-span-4 border-t p-2">
+                    <div className="col-span-12 border-t p-2">
                         <div className="flex items-center">
                             <button onClick={() => setPageIndex(pageIndex - 1)} disabled={pageIndex===0} className={`${pageIndex===0 ? buttonStyle.disbaled : buttonStyle.enabled} mr-2`}><BsChevronLeft/></button>
                             <button onClick={() => setPageIndex(pageIndex + 1)} disabled={pageIndex === Math.floor(totalLength/10)} className={`${pageIndex === Math.floor(totalLength/10) ? buttonStyle.disbaled : buttonStyle.enabled} mr-5`}><BsChevronRight/></button>
@@ -69,6 +72,20 @@ const PrediksiTable = ({user}) => {
                 </div>
             </div>
         );
+    }
+    else if (isLoading){
+        return (
+            <Loading size={'30px'}/>
+        )
+    }
+    else if(error){
+        return (
+            <div className="text-red-700">
+                {error && error.response.data.message}
+            </div>
+        )
+    }
+    
 }
  
 export default PrediksiTable;
