@@ -1,9 +1,9 @@
-import { IoWarningOutline } from "react-icons/io5";
+import { IoWarningOutline, IoCloseCircle} from "react-icons/io5";
 import { MdErrorOutline } from "react-icons/md";
 import { useEffect, useState } from "react";
 import { useGetData } from "../../../hooks/useGetData";
 const AdminFeature = ({user, currentStasiun, setLimitAir}) => {
-    const adminRole = 2
+    const adminRole = Number(process.env.REACT_APP_ADMIN_ROLE);
     const [currentFeature, setCurrentFeature] = useState(null)
     const [limitSiaga, setLimitSiaga] = useState(1)
     const [limitAwas, setLimitAwas] = useState(1)
@@ -23,7 +23,7 @@ const AdminFeature = ({user, currentStasiun, setLimitAir}) => {
             setLimitSiaga(res.data.batas_air_siaga)
             setLimitAir([res.data.batas_air_siaga, res.data.batas_air_awas])
         }
-        console.log(res);
+
         setCurrentFeature(null)
     }
 
@@ -38,7 +38,7 @@ const AdminFeature = ({user, currentStasiun, setLimitAir}) => {
 
     useEffect(() => {
         const loadData = async () => {
-            const res = await getStasiunLimitAir(user.authorization.token)
+            const res = await getStasiunLimitAir(user.authorization.token);
             if(res) {
                 const statiunData = res.data.find((item) => item.nama_pos === currentStasiun.toLowerCase())
                 setLimitAir ([statiunData.batas_air_siaga, statiunData.batas_air_awas])
@@ -85,7 +85,9 @@ const AdminFeature = ({user, currentStasiun, setLimitAir}) => {
             {currentFeature && 
                 (
                     <div className="fixed bg-gray-900/25 m-auto h-screen w-screen left-0 top-0 flex justify-center items-center">
-                        <div className="rounded-lg p-5 bg-white">
+                        <div className="relative rounded-lg p-5 bg-white">
+                            <IoCloseCircle onClick={() => setCurrentFeature(null)}
+                            className="top-1 right-1 absolute cursor-pointer hover:text-blue-700" size={20}/>
                             <p className="">Masukkan nilai limit air {currentFeature}</p>
                             <input value={currentFeature === 'siaga' ? limitSiaga : limitAwas} onChange={handleChange}
                             type="number" className="m-auto rounded-md bg-zinc-200 px-3 py-1 mt-3 outline-none border w-full"/>
