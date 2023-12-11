@@ -129,10 +129,14 @@ const Graph = ({params, setters}) => {
     const handleLoadChartData = async () => {
         const res = await getChartData(user.authorization.token, model, daerah, periode);
         if(res) {
-            setAktualData(res.data.aktual);
-            setPrediksiData(res.data.prediksi);
-            setters.setAktualAir(res.data.aktual[res.data.aktual.length-1].nilai)
-            setters.setPrediksiAir(res.data.prediksi[res.data.prediksi.length-1].nilai)
+            if (res.data.aktual.length !== 0) {
+                setAktualData(res.data.aktual);
+                setters.setAktualAir(res.data.aktual[res.data.aktual.length-1].nilai)
+            }
+            if (res.data.prediksi !== 0) {
+                setPrediksiData(res.data.prediksi);
+                setters.setPrediksiAir(res.data.prediksi[res.data.prediksi.length-1].nilai)
+            }
         }
     }
 
