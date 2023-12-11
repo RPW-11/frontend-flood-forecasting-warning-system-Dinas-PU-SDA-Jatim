@@ -30,7 +30,7 @@ const Main = () => {
     const { user } = useAuthContext();
     const { getDayName } = useGetDate();
 
-    console.log("air pred", prediksiAir);
+    
 
     const getStatus = (value) => {
         return value <= limitAir[0] ? "Aman" : value > limitAir[0] && value < limitAir[1] ? "Siaga" : value >= limitAir[1] ? "Bahaya" : "Undefined"

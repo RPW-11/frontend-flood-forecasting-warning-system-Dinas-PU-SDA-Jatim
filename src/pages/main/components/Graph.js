@@ -133,7 +133,7 @@ const Graph = ({params, setters}) => {
                 setAktualData(res.data.aktual);
                 setters.setAktualAir(res.data.aktual[res.data.aktual.length-1].nilai)
             }
-            if (res.data.prediksi !== 0) {
+            if (res.data.prediksi.length !== 0) {
                 setPrediksiData(res.data.prediksi);
                 setters.setPrediksiAir(res.data.prediksi[res.data.prediksi.length-1].nilai)
             }
