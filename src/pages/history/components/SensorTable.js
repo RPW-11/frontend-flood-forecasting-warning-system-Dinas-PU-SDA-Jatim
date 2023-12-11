@@ -16,7 +16,8 @@ const SensorTable = ({user}) => {
     const {getSensorHistory, isLoading, error} = useGetData();
     
     const handleLoadSensorData = async () => {
-        const data = await getSensorHistory(user.authorization.token, pageIndex * 10, 10);
+        const token = user ? user.authorization.token : 'def'
+        const data = await getSensorHistory(token, pageIndex * 10, 10);
         setSensorData(data.data.history);
         setTotalLength(data.data.total_count)
         console.log(data);

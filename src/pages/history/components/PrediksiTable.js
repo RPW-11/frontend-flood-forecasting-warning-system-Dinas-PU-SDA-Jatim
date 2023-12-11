@@ -16,7 +16,8 @@ const PrediksiTable = ({user}) => {
     const {getPredictionHistory, isLoading, error} = useGetData();
     
     const handleLoadPredictionHistory = async () => {
-        const data = await getPredictionHistory(user.authorization.token, pageIndex * 10, 10);
+        const token = user ? user.authorization.token : 'def'
+        const data = await getPredictionHistory(token, pageIndex * 10, 10);
         if(data) {
             setPrediksi(data.data.history);
             setTotalLength(data.data.total_count);

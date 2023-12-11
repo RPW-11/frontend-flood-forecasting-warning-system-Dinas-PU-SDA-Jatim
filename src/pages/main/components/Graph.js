@@ -127,7 +127,8 @@ const Graph = ({params, setters}) => {
     }
 
     const handleLoadChartData = async () => {
-        const res = await getChartData(user.authorization.token, model, daerah, periode);
+        const token = user ? user.authorization.token : 'def'
+        const res = await getChartData(token, model, daerah, periode);
         if(res) {
             if (res.data.aktual.length !== 0) {
                 setAktualData(res.data.aktual);

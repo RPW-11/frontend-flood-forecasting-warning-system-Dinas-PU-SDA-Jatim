@@ -4,7 +4,7 @@ export const useGetData = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    const getSensorHistory = async (token, offset, limit) => {
+    const getSensorHistory = async (token='def', offset, limit) => {
         setIsLoading(true)
         setError(null)
         try {
@@ -21,7 +21,7 @@ export const useGetData = () => {
         }
     }
 
-    const getPredictionHistory = async (token, offset, limit) => {
+    const getPredictionHistory = async (token='def', offset, limit) => {
         setIsLoading(true)
         setError(null)
         try {
@@ -38,7 +38,7 @@ export const useGetData = () => {
         }
     }
 
-    const getStasiunLimitAir = async (token) => {
+    const getStasiunLimitAir = async (token='def') => {
         setIsLoading(true)
         setError(null)
         try {
@@ -55,7 +55,7 @@ export const useGetData = () => {
         }
     }
 
-    const updateLimitAir = async (token, body) => {
+    const updateLimitAir = async (token='def', body) => {
         setIsLoading(true)
         setError(null)
         try {

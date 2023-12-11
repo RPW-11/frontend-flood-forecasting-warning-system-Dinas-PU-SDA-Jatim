@@ -4,7 +4,7 @@ export const useStatistic = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    const getChartData = async (token, model, daerah, periode) => {
+    const getChartData = async (token='def', model, daerah, periode) => {
         setIsLoading(true)
         setError(null)
 
