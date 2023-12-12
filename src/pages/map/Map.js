@@ -38,7 +38,7 @@ const Map = () => {
 
     const handleApiLoaded = (map, maps) => {
     // use map and maps objects
-    console.log(map); console.log(maps);
+    // console.log(map); console.log(maps);
     };
     return ( 
         <>

@@ -20,7 +20,6 @@ const SensorTable = ({user, stasiun}) => {
         const data = await getSensorHistory(token, pageIndex * 10, 10, stasiun);
         setSensorData(data.data.history);
         setTotalLength(data.data.total_count)
-        console.log(data);
     }
 
     useEffect(() => {

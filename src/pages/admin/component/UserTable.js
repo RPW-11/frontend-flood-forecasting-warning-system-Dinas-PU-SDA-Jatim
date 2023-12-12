@@ -9,7 +9,6 @@ const UserTable = ({user}) => {
     const [modalType, setModalType] = useState(null);
 
     const { getAllUsers, addKontak, updateKontak, isLoading, error } = useAdmin();
-    console.log(error);
     const handleLoadUser = async () => {
         const res = await getAllUsers(user.authorization.token)
         if (res) {

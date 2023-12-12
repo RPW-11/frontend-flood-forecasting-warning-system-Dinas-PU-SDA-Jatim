@@ -9,8 +9,7 @@ export const useStatistic = () => {
         setError(null)
 
         try {
-            // const url = 
-            console.log(model, daerah, periode);
+            
             const res = await api.get(`/getChartData?model=${model.toLowerCase()}&daerah=${daerah.toLowerCase()}&periode=${periode}`, {
                 headers: {
                     Authorization: `Bearer ${token}`

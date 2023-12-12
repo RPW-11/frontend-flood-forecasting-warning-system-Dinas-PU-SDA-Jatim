@@ -16,7 +16,7 @@ function App() {
     { path: "/dashboard/:stasiun", element: <Wrapper child={<Main/>}/>},
     { path: "/admin", element: <PrivateRoute><Wrapper child={<Admin/>}/></PrivateRoute>},
     { path: "*", element: <NotFound/>}
-  ])
+  ], { basename: '/ffsview' })
   return (
     <RouterProvider router={router}/>
   );
