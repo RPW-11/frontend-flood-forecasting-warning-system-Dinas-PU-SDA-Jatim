@@ -1,15 +1,23 @@
-import { IoWarningOutline, IoCloseCircle} from "react-icons/io5";
+import { IoWarningOutline, IoCloseCircle, IoLocationOutline} from "react-icons/io5";
 import { MdErrorOutline } from "react-icons/md";
 import { useEffect, useState } from "react";
 import { useGetData } from "../../../hooks/useGetData";
-const AdminFeature = ({user, currentStasiun, setLimitAir}) => {
+const AdminFeature = ({user}) => {
     const adminRole = Number(process.env.REACT_APP_ADMIN_ROLE);
     const [currentFeature, setCurrentFeature] = useState(null)
     const [limitSiaga, setLimitSiaga] = useState(1)
     const [limitAwas, setLimitAwas] = useState(1)
     const [stationInformation, setStationInformation] = useState(null)
+    const [isStation, setIsStation] = useState(false)
+    const [stasiun, setStasiun] = useState('Dhompo')
+
 
     const { getStasiunLimitAir, updateLimitAir, error } = useGetData();
+
+    const stationHandler = (val) => {
+        setStasiun(val)
+        setIsStation(false)
+    }
 
     const handleApply = async () => {
         const res = await updateLimitAir(user.authorization.token, {
@@ -18,10 +26,10 @@ const AdminFeature = ({user, currentStasiun, setLimitAir}) => {
             new_batas_air_awas: limitAwas
         })
         if(res) {
+            console.log(res);
             setStationInformation(res.data)
             setLimitAwas(res.data.batas_air_awas)
             setLimitSiaga(res.data.batas_air_siaga)
-            setLimitAir([res.data.batas_air_siaga, res.data.batas_air_awas])
         }
 
         setCurrentFeature(null)
@@ -38,23 +46,35 @@ const AdminFeature = ({user, currentStasiun, setLimitAir}) => {
 
     useEffect(() => {
         const loadData = async () => {
-            const res = await getStasiunLimitAir(user.authorization.token);
+            const id = stasiun === 'Dhompo' ? 1 : 2
+            const res = await getStasiunLimitAir("rand", id);
             if(res) {
-                const statiunData = res.data.find((item) => item.nama_pos === currentStasiun.toLowerCase())
-                setLimitAir ([statiunData.batas_air_siaga, statiunData.batas_air_awas])
-                setLimitAwas(statiunData.batas_air_awas)
-                setLimitSiaga(statiunData.batas_air_siaga)
-                setStationInformation(statiunData)
+                const { batas_air_siaga, batas_air_awas } = res.data
+                setLimitAwas(batas_air_awas)
+                setLimitSiaga(batas_air_siaga)
+                setStationInformation(res.data)
             }
         }
         loadData()
-    }, [currentStasiun])
+    }, [stasiun])
 
     return ( 
         <div className="">
             <p className="font-medium text-sm text-left mt-3">Admin Setting <s className="no-underline text-zinc-500 italic">{(user && user.user.role !== adminRole) && '(Anda bukan seorang Admin)'}</s></p>
             <p className="font-light text-xs text-left mt-2">Atur limit bahaya air dengan memasukkan nilai yang sesuai.</p>
             <div className="flex items-center">
+                <div className="relative text-left w-[150px] rounded-lg px-3 py-2 bg-purple-100 mr-3 mt-3">
+                    <div className="flex items-center">
+                        <IoLocationOutline/>
+                        <p className="text-sm font-semibold ml-1">Stasiun</p>
+                    </div>
+                    <div onClick={() => setIsStation(!isStation)} 
+                    className="flex font-base items-center cursor-pointer my-1 bg-purple-200 hover:bg-purple-300 rounded-md px-2 py-1 text-sm">{stasiun}</div>
+                    {isStation && <ul className="z-10 text-left text-sm absolute overflow-hidden bg-white top-20 right-0 w-full rounded-lg shadow border">
+                            <li onClick={() => stationHandler('Dhompo')} className="py-2 px-5 cursor-pointer hover:bg-zinc-500">Dhompo</li>
+                            <li onClick={() => stationHandler('Purwodadi')} className="py-2 px-5 cursor-pointer hover:bg-zinc-500">Purwodadi</li>
+                        </ul>}
+                </div>
                 <div className={`relative text-left w-[150px] rounded-lg px-3 py-2 ${user && user.user.role === adminRole ? 'bg-orange-100' : 'bg-zinc-100'} mt-3`}>
                     <div className="flex items-center">
                         <IoWarningOutline />

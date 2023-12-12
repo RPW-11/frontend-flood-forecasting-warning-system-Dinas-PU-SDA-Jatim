@@ -4,7 +4,7 @@ import { useGetData } from "../../../hooks/useGetData";
 import {BsChevronLeft, BsChevronRight, BsFillCalendarDayFill, BsFillClockFill, BsGraphUp} from "react-icons/bs"
 import Loading from "../../../components/Loading";
 
-const SensorTable = ({user}) => {
+const SensorTable = ({user, stasiun}) => {
     const buttonStyle = {
         disbaled: 'p-1 rounded-full border bg-zinc-100 text-zinc-400',
         enabled: 'p-1 rounded-full border hover:bg-zinc-200'
@@ -17,7 +17,7 @@ const SensorTable = ({user}) => {
     
     const handleLoadSensorData = async () => {
         const token = user ? user.authorization.token : 'def'
-        const data = await getSensorHistory(token, pageIndex * 10, 10);
+        const data = await getSensorHistory(token, pageIndex * 10, 10, stasiun);
         setSensorData(data.data.history);
         setTotalLength(data.data.total_count)
         console.log(data);
@@ -33,23 +33,17 @@ const SensorTable = ({user}) => {
             <div className="my-8">
                 <div className="rounded-lg min-w-[1000px] border grid grid-cols-12 overflow-hidden text-sm bg-white shadow">
                     <div className="col-span-1 flex items-center px-5 text-left  border-blue-500 bg-blue-100 py-2 font-semibold">ID</div>
-                    <div className="col-span-2 flex items-center px-5 text-left  border-blue-500 bg-blue-100 py-2 font-semibold"><BsFillCalendarDayFill className="mr-2"/>Tangal</div>
-                    <div className="col-span-1 flex items-center px-5 text-left  border-blue-500 bg-blue-100 py-2 font-semibold"><BsFillClockFill className='mr-2'/>Jam</div>
-                    <div className="col-span-2 flex items-center px-5 text-left  bg-blue-100 py-2 font-semibold">CH Cendono (m)</div>
-                    <div className="col-span-2 flex items-center px-5 text-left  border-blue-500 bg-blue-100 py-2 font-semibold">CH Lawang (m)</div>
-                    <div className="col-span-2 flex items-center px-5 text-left  bg-blue-100 py-2 font-semibold">LMA Purwodadi (m)</div>
-                    <div className="col-span-2 flex items-center px-5 text-left  bg-blue-100 py-2 font-semibold">LMA Dhompo (m)</div>
+                    <div className="col-span-3 flex items-center px-5 text-left  border-blue-500 bg-blue-100 py-2 font-semibold"><BsFillCalendarDayFill className="mr-2"/>Tangal</div>
+                    <div className="col-span-4 flex items-center px-5 text-left  border-blue-500 bg-blue-100 py-2 font-semibold"><BsFillClockFill className='mr-2'/>Jam</div>
+                    <div className="col-span-4 flex items-center px-5 text-left  bg-blue-100 py-2 font-semibold">CH {stasiun} (m)</div>
 
                     {
                         sensorData.map((item, i) => (
                             <div className="col-span-12 grid grid-cols-12" key={i}>
                                 <div className="col-span-1 px-5 text-left border-t py-2">{item.id}</div>
-                                <div className="col-span-2 px-5 text-left border-t py-2">{getDate(item.tanggal)}</div>
-                                <div className="col-span-1 px-5 text-left border-t py-2">{getTime(item.tanggal)}</div>
-                                <div className="col-span-2 px-5 text-left border-t py-2">{item.curah_hujan_cendono}</div>
-                                <div className="col-span-2 px-5 text-left border-t py-2">{item.curah_hujan_lawang}</div>
-                                <div className="col-span-2 px-5 text-left border-t py-2">{item.level_muka_air_purwodadi}</div>
-                                <div className="col-span-2 px-5 text-left border-t py-2">{item.level_muka_air_dhompo}</div>
+                                <div className="col-span-3 px-5 text-left border-t py-2">{getDate(item.tanggal)}</div>
+                                <div className="col-span-4 px-5 text-left border-t py-2">{getTime(item.tanggal)}</div>
+                                <div className="col-span-4 px-5 text-left border-t py-2">{stasiun === 'Cendono' ? item.curah_hujan_cendono : item.curah_hujan_lawang}</div>
                             </div>
                         ))
                     }

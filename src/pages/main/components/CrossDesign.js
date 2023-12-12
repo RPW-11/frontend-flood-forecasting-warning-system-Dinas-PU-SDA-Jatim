@@ -4,24 +4,25 @@ import { useStatistic } from '../../../hooks/useStatistic';
 import { useAuthContext } from '../../../hooks/useAuthContext';
 import { useEffect, useState } from 'react';
 import { useGetDate } from '../../../hooks/useGetDateTime';
-import Loading from '../../../components/Loading';
 ChartJs.register(LineElement, PointElement, CategoryScale, LinearScale, Tooltip, Legend, Filler);
-const Graph = ({params, setters}) => {
-    const [aktualData, setAktualData] = useState([]);
-    const [prediksiData, setPrediksiData] = useState([]);
-    const [dates, setDates] = useState([]);
 
-    const { getChartData, isLoading, error } = useStatistic();
-    const { getTime } = useGetDate();
-    const { model, daerah, periode } = params;
-    const { user } = useAuthContext();
+const CrossDesign = ({levelAir}) => {
+    const labels = [0, 1, 2, 3, 5, 7, 9, 10]
+    const datasets = [
+        [8], [8,3], [3], [1], [0], [0.5], [8], [8]
+    ]
+    const datassets2 = [levelAir, levelAir, levelAir, levelAir, levelAir, levelAir, levelAir, levelAir,]
+    const combinedDataset = labels.map((label, index) => {
+        const values = datasets[index] || []; // If no values, use an empty array
+        return values.map(value => ({ x: label.toString(), y: value }));
+    }).flat();
 
     const data = {
-        labels: dates.map(date => {return getTime(date)}),
+        labels: labels.map(label => label.toString()),
         datasets: [
             {
-                label: "Aktual",
-                data: aktualData,
+                label: "Level Air",
+                data: datassets2,
                 borderColor: 'rgb(35,211,237)',
                 pointRadius: 3,
                 pointHoverRadius: 7,
@@ -34,19 +35,17 @@ const Graph = ({params, setters}) => {
                     }
                     const {ctx, data, chartArea: {top, bottom}} = context.chart;
                     const gradientBg = ctx.createLinearGradient(0, top, 0, bottom);
-                    gradientBg.addColorStop(0, 'rgba(35,211,237,1)');
-                    gradientBg.addColorStop(0.3, 'rgba(35,211,237,.5)');
-                    gradientBg.addColorStop(1, 'rgba(35,211,237,0)')
+                    gradientBg.addColorStop(0, 'rgba(64,211,237,0.3)');
+                    gradientBg.addColorStop(1, 'rgba(64,211,237,1)')
                     return gradientBg;
                 },
-                tension: 0.1,
                 fill: true,
             },
             {
-                label: "Prediksi",
-                data: prediksiData,
-                borderColor: 'rgb(247,91,2)',
-                pointRadius: 3,
+                label: "Bingkai Tanggul",
+                data: combinedDataset,
+                borderColor: 'rgb(235,236,238)',
+                pointRadius: 0,
                 pointHoverRadius: 7,
                 pointHoverBackgroundColor: 'black',
                 pointHoverBorderColor: 'rgba(0,0,0,0.3)',
@@ -57,12 +56,10 @@ const Graph = ({params, setters}) => {
                     }
                     const {ctx, data, chartArea: {top, bottom}} = context.chart;
                     const gradientBg = ctx.createLinearGradient(0, top, 0, bottom);
-                    gradientBg.addColorStop(0, 'rgba(247,91,2,1)');
-                    gradientBg.addColorStop(0.3, 'rgba(247,91,2,.5)');
-                    gradientBg.addColorStop(1, 'rgba(247,91,2,0)')
+                    gradientBg.addColorStop(0, 'rgba(235,236,238)');
+                    gradientBg.addColorStop(1, 'rgba(235,236,238)')
                     return gradientBg;
                 },
-                tension: 0.1,
                 fill: true,
             },
         ]
@@ -98,7 +95,7 @@ const Graph = ({params, setters}) => {
                     text: 'Tinggi Air (m)',
                     color: 'black'
                 },
-                suggestedMax: Math.max(...data.datasets[0].data),
+                suggestedMax: Math.max(...data.datasets[0].data) + 2,
                 suggestedMin: 0,
                 grid: {
                     color: 'rgba(0,0,0,.05)',
@@ -112,55 +109,19 @@ const Graph = ({params, setters}) => {
                 }
             },
             x: {
-                title:{ 
-                    display: true,
-                    text: 'Periode Waktu',
-                    color: 'black'
-                },
-                grid: {
-                    display: false
-                },
-                border: {
-                    display: false
-                },
+                display: false
             }
         }
     }
 
-    useEffect(() => {
-        const handleLoadChartData = async () => {
-            const token = user ? user.authorization.token : 'def'
-            const res = await getChartData(token, model, daerah, periode);
-            let tempPred = []
-            let tempAct = []
-            let tempDate = []
-            let aktual = "Tidak ada"
-            let prediksi = "Tidak ada"
-            if(res) {
-                res.data.map(item => {
-                    if (item.aktual) {
-                        aktual = item.aktual
-                    }
-                    if (item.prediksi) {
-                        prediksi = item.prediksi
-                    }
-                    tempAct.push(item.aktual); tempPred.push(item.prediksi); tempDate.push(item.tanggal)
-                })
-    
-                setDates(tempDate); setAktualData(tempAct); setPrediksiData(tempPred)
-                setters.setAktualAir(aktual); setters.setPrediksiAir(prediksi); setters.setChartData(res.data)
-            }
-        }
-        handleLoadChartData();
-    },[model, daerah, periode])
-
     return ( 
-        <div className="h-full">
-            <div className="h-[250px]">
-                {isLoading ? <Loading size={'30px'} color='#000000'/> : <Line data={data} options={options}></Line>}
+        <div className="">
+            <p className="text-xs font-medium text-left mt-3">Visualisasi air dengan tanggul</p>
+            <div className="h-[200px]">
+                {<Line data={data} options={options}></Line>}
             </div>
         </div>
-     );
+    );
 }
  
-export default Graph;
+export default CrossDesign;

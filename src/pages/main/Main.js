@@ -3,32 +3,39 @@ import LevelMukaAir from "./components/LevelMukaAir";
 import Status from "./components/Status";
 import Graph from "./components/Graph";
 import Graph2 from "./components/Graph2";
-import AdminFeature from "./components/AdminFeature";
+import CrossDesign from "./components/CrossDesign";
 import { AiOutlineLineChart } from "react-icons/ai";
+import { CiImageOn } from "react-icons/ci";
 import { AiOutlineControl } from "react-icons/ai";
-import { IoStatsChart, IoLocationOutline } from "react-icons/io5";
+import { IoStatsChart } from "react-icons/io5";
 import { IoIosTimer } from "react-icons/io";
 import { MdEngineering } from "react-icons/md";
-import { FaHandsClapping } from "react-icons/fa6";
-import { useState } from "react";
+import { FaHandsClapping, FaTableCells } from "react-icons/fa6";
+import { useEffect, useState } from "react";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useGetDate } from "../../hooks/useGetDateTime";
+import { useNavigate, useParams } from "react-router-dom";
+import { useGetData } from "../../hooks/useGetData";
 const Main = () => {
     const currentDate = new Date()
+    const { stasiun } = useParams();
+    const navigate = useNavigate();
     const [isPeriod, setIsPeriod] = useState(false)
     const [period, setPeriod] = useState(1)
     const [model, setModel] = useState('GRU')
-    const [stasiun, setStasiun] = useState('Dhompo')
-    const [isStation, setIsStation] = useState(false)
     const [isModel, setIsModel] = useState(false)
+    const [limitAir, setLimitAir] = useState([-1, -1])
+    const [showImage, setShowImage] = useState(false)
 
-    const [aktualAir, setAktualAir] = useState(1)
-    const [prediksiAir, setPrediksiAir] = useState(1)
-    const [limitAir, setLimitAir] = useState([null, null])
+    const [aktualAir, setAktualAir] = useState(null)
+    const [prediksiAir, setPrediksiAir] = useState(null)
+    const [chartData, setChartData] = useState([]);
+
 
     
     const { user } = useAuthContext();
-    const { getDayName } = useGetDate();
+    const { getStasiunLimitAir, isLoading, error } = useGetData();
+    const { getDayName, getTime } = useGetDate();
 
     
 
@@ -45,20 +52,18 @@ const Main = () => {
         setModel(val)
         setIsModel(false)
     }
+    
 
-    const stationHandler = (val) => {
-        setStasiun(val)
-        setIsStation(false)
-        setPeriod(1)
-    }
-
-    const getChartParams = () => {
-        return {
-            model,
-            daerah: stasiun,
-            periode: period
+    useEffect(() => {
+        if (stasiun !== 'Dhompo' && stasiun !== 'Purwodadi') {
+            navigate('/not-found')
         }
-    }
+        const id = stasiun === 'Dhompo' ? 1 : 2
+        getStasiunLimitAir("rand", id).then(res => {
+            const {batas_air_siaga, batas_air_awas} = res.data || [-1, -1]
+            setLimitAir([batas_air_siaga, batas_air_awas])
+        }).catch()
+    }, [])
 
     return ( 
         <div className="overflow-auto text-black 2xl:px-[50px] h-full">
@@ -77,7 +82,7 @@ const Main = () => {
             </div>
             <div className="grid grid-rows-12">
                 <div className="row-span-1 flex">
-                    <div className="rounded-md border p-5 mr-3 bg-white w-fit shadow">
+                    <div className="rounded-md border p-5 mr-3 bg-white w-fit 2xl:w-full shadow">
                         <div className="flex items-center">
                             <div className="rounded-full p-2 border border-neutral-900">
                                 <IoStatsChart />
@@ -87,16 +92,23 @@ const Main = () => {
                         <p className="font-light text-xs text-left mt-3">Informasi kondisi sungai saat ini</p>
                         <div className="flex mt-3 text-left ">
                             <div className="flex items-center">
-                                <Status value={getStatus(aktualAir)}/>
+                                <Status value={getStatus(aktualAir ? aktualAir : -1)}/>
                                 <div className="ml-3"><ElevasiMukaAir value={60}/></div>
                                 <div className="ml-3"><LevelMukaAir value={aktualAir}/></div>
                             </div>
                         </div>
                         <div>
-                            <Graph2/>
+                            <CrossDesign levelAir={aktualAir}/>
                         </div>
                     </div>
-                    <div className="rounded-md border p-5 shadow w-full">
+                    {!showImage ? <div className="rounded-md border p-5 shadow w-full relative">
+                        <div className="absolute top-1 right-1 flex items-center">
+                            <p className="text-xs italic">Klik icon untuk melihat gambar</p>
+                            <div onClick={() => setShowImage(!showImage)}
+                            className="p-1 mx-1 cursor-pointer hover:bg-gray-200 rounded-full">
+                                <CiImageOn />
+                            </div>
+                        </div>
                         <div className="flex items-center">
                             <div className="rounded-full items-center p-2 border border-black">
                                 <AiOutlineControl/>
@@ -105,18 +117,6 @@ const Main = () => {
                         </div>
                         <p className="font-light text-xs text-left mt-3">Atur komponen prediksi dengan menekan tombol pada masing-masing opsi konfigurasi.</p>
                         <div className="flex flex-wrap mt-3">
-                            <div className="relative text-left w-[150px] rounded-lg px-3 py-2 bg-purple-100">
-                                <div className="flex items-center">
-                                    <IoLocationOutline/>
-                                    <p className="text-sm font-semibold ml-1">Stasiun</p>
-                                </div>
-                                <div onClick={() => setIsStation(!isStation)} 
-                                className="flex font-base items-center cursor-pointer my-1 bg-purple-200 hover:bg-purple-300 rounded-md px-2 py-1 text-sm">{stasiun}</div>
-                                {isStation && <ul className="z-10 text-left text-sm absolute overflow-hidden bg-white top-20 right-0 w-full rounded-lg shadow border">
-                                        <li onClick={() => stationHandler('Dhompo')} className="py-2 px-5 cursor-pointer hover:bg-zinc-500">Dhompo</li>
-                                        <li onClick={() => stationHandler('Purwodadi')} className="py-2 px-5 cursor-pointer hover:bg-zinc-500">Purwodadi</li>
-                                    </ul>}
-                            </div>
                             <div className="relative text-left w-[150px] rounded-lg px-3 py-2 bg-blue-100 ml-3">
                                 <div className="flex items-center">
                                     <MdEngineering/>
@@ -150,28 +150,65 @@ const Main = () => {
                                 </ul>}
                             </div> 
                         </div>
-                        {user && <AdminFeature user={user} currentStasiun={stasiun} setLimitAir={setLimitAir}/>}
+                        <CrossDesign levelAir={prediksiAir}/>
+                    </div> : 
+                    <div className="rounded-md border p-5 shadow w-full relative">
+                        <div className="absolute top-1 right-1 flex items-center">
+                            <p className="text-xs italic">Klik icon untuk sembunyikan gambar</p>
+                            <div onClick={() => setShowImage(!showImage)}
+                            className="p-1 mx-1 cursor-pointer hover:bg-gray-200 rounded-full">
+                                <CiImageOn />
+                            </div>
+                        </div>
+                        <p className="font-semibold text-sm text-left">Gambar Sungai Stasiun {stasiun}</p>
+                        <div className="rounded-lg overflow-hidden m-3">
+                            <img src="/Gambar_sungai.jpeg" alt="" className="w-full h-full object-contain"/>
+                        </div>
                     </div>
+                    }
                 </div>
-                <div className="row-span-2 my-3 border rounded-md p-5 shadow">
-                    <div className="">
+                <div className="flex">
+                    <div className="row-span-2 my-3 border rounded-md p-5 shadow w-2/3">
+                        <div className="">
+                            <div className="flex items-center">
+                                <div className="rounded-full border border-black p-2">
+                                    <AiOutlineLineChart/>
+                                </div>
+                                <p className="font-semibold ml-3">Prediksi Perkembangan Air Sungai {stasiun}</p>
+                            </div>
+                            <p className="font-light text-xs text-left mt-3">Informasi kondisi sungai yang akan datang berdasarkan konfigurasi prediksi.</p>
+                            <div className="flex mt-3 text-left ">
+                                <div className="flex items-center">
+                                    <Status value={getStatus(prediksiAir ? prediksiAir : -1)}/>
+                                    <div className="ml-3"><ElevasiMukaAir value={12.5}/></div>
+                                    <div className="ml-3"><LevelMukaAir value={prediksiAir}/></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="">
+                            <Graph params={{model,daerah: stasiun,periode: period}} setters={{setAktualAir, setPrediksiAir, setChartData}}/>
+                        </div>
+                    </div>
+                    <div className="row-span-2 my-3 ml-3 border rounded-md p-5 shadow w-1/3">
                         <div className="flex items-center">
                             <div className="rounded-full border border-black p-2">
-                                <AiOutlineLineChart/>
+                                <FaTableCells/>
                             </div>
-                            <p className="font-semibold ml-3">Prediksi Perkembangan Air Sungai {stasiun}</p>
+                            <p className="font-semibold ml-3">Tabel Prediksi Perkembangan Air Sungai {stasiun}</p>
                         </div>
-                        <p className="font-light text-xs text-left mt-3">Informasi kondisi sungai yang akan datang berdasarkan konfigurasi prediksi.</p>
-                        <div className="flex mt-3 text-left ">
-                            <div className="flex items-center">
-                                <Status value={getStatus(prediksiAir)}/>
-                                <div className="ml-3"><ElevasiMukaAir value={12.5}/></div>
-                                <div className="ml-3"><LevelMukaAir value={prediksiAir}/></div>
-                            </div>
+                        <div className="grid grid-cols-9 w-full border mt-5 rounded-lg max-h-[350px] text-sm shadow overflow-auto">
+                            <div className="col-span-3 font-semibold py-2 border-b h-fit text-sm">Jam</div>
+                            <div className="col-span-3 font-semibold py-2 border-b h-fit">Aktual</div>
+                            <div className="col-span-3 font-semibold py-2 border-b h-fit">Prediksi</div>
+
+                            {chartData.map(item => 
+                                <div className="col-span-9 grid grid-cols-9" key={item.tanggal}>
+                                    <div className="col-span-3 py-1 border-b text-sm">{getTime(item.tanggal)}</div>
+                                    <div className="col-span-3 py-1 border-b text-sm">{item.aktual}</div>
+                                    <div className="col-span-3 py-1 border-b text-sm">{item.prediksi}</div>
+                                </div>
+                            )}
                         </div>
-                    </div>
-                    <div className="">
-                        <Graph params={getChartParams()} setters={{setAktualAir, setPrediksiAir}}/>
                     </div>
                 </div>
             </div>

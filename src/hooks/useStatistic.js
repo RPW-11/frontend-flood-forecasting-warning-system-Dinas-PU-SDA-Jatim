@@ -16,7 +16,6 @@ export const useStatistic = () => {
                     Authorization: `Bearer ${token}`
                 }
             })
-            console.log(res.data);
             setIsLoading(false)
             return res.data
         } catch (error) {

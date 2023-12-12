@@ -4,7 +4,7 @@ const LevelMukaAir = ({value}) => {
         <div className="p-3 text-left rounded-lg bg-white border whitespace-nowrap">
             <div className="flex items-center">
                 <div>
-                    <p className="text-sm">Level Muka Air</p>
+                    <p className="text-sm">Tinggi Muka Air</p>
                     <p className="text-2xl font-bold">
                         {value} <s className="no-underline text-base font-light">m</s>
                     </p>

@@ -1,16 +1,25 @@
 import SensorTable from "./components/SensorTable";
 import PrediksiTable from "./components/PrediksiTable";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuthContext } from "../../hooks/useAuthContext";
+import { useParams, useNavigate } from "react-router-dom";
 const History = () => {
-    const [isSensor, setIsSensor] = useState(false);
+    const [isSensor, setIsSensor] = useState(true);
     const [isClicking, setIsClicking] = useState(false);
+    const { stasiun } = useParams();
+    const navigate = useNavigate();
     const handleClick = (cb) => {
         cb();
         setIsClicking(false);
     }
 
     const {user} = useAuthContext();
+
+    useEffect(() => {
+        if (stasiun !== 'Cendono' && stasiun !== 'Lawang') {
+            navigate('/not-found')
+        }
+    }, [])
 
     
     return ( 
@@ -24,7 +33,7 @@ const History = () => {
                     <p onClick={() => handleClick(() => setIsSensor(true))}className="py-2 hover:bg-zinc-200 px-5 cursor-pointer">Sensor</p>
                 </div>}
             </div>
-            {isSensor ? <SensorTable user={user}/> : <PrediksiTable user={user}/>}
+            {isSensor ? <SensorTable user={user} stasiun={stasiun}/> : <PrediksiTable user={user}/>}
         </div>
     );
 }

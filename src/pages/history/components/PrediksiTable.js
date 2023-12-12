@@ -37,12 +37,12 @@ const PrediksiTable = ({user}) => {
                     <div className="col-span-1 flex items-center px-5 text-left  border-blue-500 bg-blue-100 py-2 font-semibold">ID</div>
                     <div className="col-span-2 flex items-center px-5 text-left  border-blue-500 bg-blue-100 py-2 font-semibold"><BsFillCalendarDayFill className="mr-2"/>Tangal</div>
                     <div className="col-span-1 flex items-center px-5 text-left  border-blue-500 bg-blue-100 py-2 font-semibold"><BsFillClockFill className='mr-2'/>Jam</div>
-                    <div className="col-span-2 flex items-center px-5 text-left  bg-blue-100 py-2 font-semibold">LMA Purwodadi LSTM (m)</div>
-                    <div className="col-span-1 flex items-center px-5 text-left  border-blue-500 bg-blue-100 py-2 font-semibold">LMA Purwodadi GRU (m)</div>
-                    <div className="col-span-1 flex items-center px-5 text-left  border-blue-500 bg-blue-100 py-2 font-semibold">LMA Purwodadi TCN (m)</div>
-                    <div className="col-span-2 flex items-center px-5 text-left  bg-blue-100 py-2 font-semibold">LMA Dhompo LSTM (m)</div>
-                    <div className="col-span-1 flex items-center px-5 text-left  border-blue-500 bg-blue-100 py-2 font-semibold">LMA Dhompo GRU (m)</div>
-                    <div className="col-span-1 flex items-center px-5 text-left  border-blue-500 bg-blue-100 py-2 font-semibold">LMA Dhompo TCN (m)</div>
+                    <div className="col-span-2 flex items-center px-5 text-left  bg-blue-100 py-2 font-semibold">TMA Purwodadi LSTM (m)</div>
+                    <div className="col-span-1 flex items-center px-5 text-left  border-blue-500 bg-blue-100 py-2 font-semibold">TMA Purwodadi GRU (m)</div>
+                    <div className="col-span-1 flex items-center px-5 text-left  border-blue-500 bg-blue-100 py-2 font-semibold">TMA Purwodadi TCN (m)</div>
+                    <div className="col-span-2 flex items-center px-5 text-left  bg-blue-100 py-2 font-semibold">TMA Dhompo LSTM (m)</div>
+                    <div className="col-span-1 flex items-center px-5 text-left  border-blue-500 bg-blue-100 py-2 font-semibold">TMA Dhompo GRU (m)</div>
+                    <div className="col-span-1 flex items-center px-5 text-left  border-blue-500 bg-blue-100 py-2 font-semibold">TMA Dhompo TCN (m)</div>
 
                     {
                         prediksi.map((item, i) => (

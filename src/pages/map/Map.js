@@ -1,12 +1,22 @@
 import GoogleMapReact from 'google-map-react';
+import { useNavigate } from 'react-router-dom';
 
 const Marker = ({text}) => {
+    const navigate = useNavigate()
+    const handleNavigate = () => {
+        if (text.startsWith('AWLR') || text.startsWith('awlr')) {
+            navigate(`/dashboard/${text.split(' ')[1]}`)
+        } else {
+            navigate(`/history/${text.split(' ')[1]}`)
+        }
+    }
     return (
-        <div className="flex items-center font-semibold w-fit px-3 h-[50px]">
+        <div onClick={handleNavigate}
+        className="flex items-center font-semibold w-fit px-3 h-[50px] cursor-pointer group">
             <div className="w-[30px] h-[30px] rounded-full overflo-hidden shadow border border-blue-700 mr-2">
                 <img src="https://cdn-icons-png.flaticon.com/512/119/119573.png" alt="ICN" className='w-full h-full object-cover'/>
             </div>
-            <p className='rounded-md bg-yellow-100 px-3 text-lg whitespace-nowrap'>{text}</p>
+            <p className='rounded-md bg-yellow-100 px-3 text-lg whitespace-nowrap group-hover:bg-yellow-400'>{text}</p>
         </div>
     )
 }
@@ -32,7 +42,10 @@ const Map = () => {
     };
     return ( 
         <>
-            <p className="text-3xl font-semibold text-left pt-3 pb-7">Lokasi Stasiun yang ada</p>
+            <div className='text-left'>
+                <p className="text-3xl font-semibold text-left my-3">FLOOD FORECASTING AND WARNING SYSTEM</p>
+                <p className="text-sm italic mb-5">Sistem Peramalan dan Peringatan Banjir</p>
+            </div>
             <div className="w-full h-[600px]">
                 <GoogleMapReact
                     bootstrapURLKeys={{ key: process.env.REACT_APP_MAP_API_KEY }}
@@ -46,6 +59,7 @@ const Map = () => {
                     ))}
                 </GoogleMapReact>
             </div>
+            <p className="text-sm text-black italic mt-5 font-semibold">Petunjuk :  untuk melihat peramalan dan peringatan dini di stasiun monitoring, silakan klik titik stasiun monitoring yang diinginkan</p>
         </>
      );
 }

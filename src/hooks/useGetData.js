@@ -4,11 +4,11 @@ export const useGetData = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    const getSensorHistory = async (token='def', offset, limit) => {
+    const getSensorHistory = async (token='def', offset, limit, daerah) => {
         setIsLoading(true)
         setError(null)
         try {
-            const res = await api.get(`/getHistory?offset=${offset}&limit=${limit}`, {
+            const res = await api.get(`/getHistory?daerah=${daerah.toLowerCase()}&offset=${offset}&limit=${limit}`, {
                 headers: {Authorization: `Bearer ${token}`}
             });
             setIsLoading(false)
@@ -38,11 +38,11 @@ export const useGetData = () => {
         }
     }
 
-    const getStasiunLimitAir = async (token='def') => {
+    const getStasiunLimitAir = async (token='def', stasiunId) => {
         setIsLoading(true)
         setError(null)
         try {
-            const res = await api.get(`/getAllStasiunAir`, {
+            const res = await api.get(`/getStasiunAirInfo?id=${stasiunId}`, {
                 headers: {Authorization: `Bearer ${token}`}
             });
             setIsLoading(false)

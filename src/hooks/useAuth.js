@@ -50,5 +50,25 @@ export const useAuth = () => {
         }
     }
 
-    return {login, register, isLoading, error};
+    const logout = async (token) => {
+        setIsLoading(true);
+        setError(null);
+
+        try {
+            const res = await api.post('/logout', {}, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            setIsLoading(false);
+            return res.data;
+        } catch (error) {
+            console.log("error occured", error);
+            setError(error.response.data.message);
+            setIsLoading(false);
+            return null;
+        }
+    }
+
+    return {login, register, logout, isLoading, error};
 }
