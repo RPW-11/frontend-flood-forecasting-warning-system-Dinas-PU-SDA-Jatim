@@ -22,7 +22,7 @@ const Main = () => {
     const navigate = useNavigate();
     const [isPeriod, setIsPeriod] = useState(false)
     const [period, setPeriod] = useState(1)
-    const [model, setModel] = useState('GRU')
+    const [model, setModel] = useState('LSTM')
     const [isModel, setIsModel] = useState(false)
     const [limitAir, setLimitAir] = useState([-1, -1])
     const [showImage, setShowImage] = useState(false)
