@@ -98,7 +98,7 @@ const Graph = ({params, setters}) => {
                     text: 'Tinggi Air (m)',
                     color: 'black'
                 },
-                suggestedMax: Math.max(...data.datasets[0].data),
+                suggestedMax: 5,
                 suggestedMin: 0,
                 grid: {
                     color: 'rgba(0,0,0,.05)',
