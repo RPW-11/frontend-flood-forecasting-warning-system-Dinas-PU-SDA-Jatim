@@ -156,7 +156,7 @@ const Graph = ({params, setters}) => {
 
     return ( 
         <div className="h-full">
-            <div className="h-[300px]">
+            <div className="h-[250px]">
                 {isLoading ? <Loading size={'30px'} color='#000000'/> : <Line data={data} options={options}></Line>}
             </div>
         </div>

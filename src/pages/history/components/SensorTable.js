@@ -33,16 +33,23 @@ const SensorTable = ({user, stasiun}) => {
                 <div className="rounded-lg min-w-[1000px] border grid grid-cols-12 overflow-hidden text-sm bg-white shadow">
                     <div className="col-span-1 flex items-center px-5 text-left  border-blue-500 bg-blue-100 py-2 font-semibold">ID</div>
                     <div className="col-span-3 flex items-center px-5 text-left  border-blue-500 bg-blue-100 py-2 font-semibold"><BsFillCalendarDayFill className="mr-2"/>Tangal</div>
-                    <div className="col-span-4 flex items-center px-5 text-left  border-blue-500 bg-blue-100 py-2 font-semibold"><BsFillClockFill className='mr-2'/>Jam</div>
-                    <div className="col-span-4 flex items-center px-5 text-left  bg-blue-100 py-2 font-semibold">CH {stasiun} (m)</div>
+                    <div className="col-span-3 flex items-center px-5 text-left  border-blue-500 bg-blue-100 py-2 font-semibold"><BsFillClockFill className='mr-2'/>Jam</div>
+                    <div className="col-span-3 flex items-center px-5 text-left  border-blue-500 bg-blue-100 py-2 font-semibold"><BsFillClockFill className='mr-2'/>Status Curah Hujan</div>
+                    <div className="col-span-2 flex items-center px-5 text-left  bg-blue-100 py-2 font-semibold">CH {stasiun} (m)</div>
 
                     {
                         sensorData.map((item, i) => (
                             <div className="col-span-12 grid grid-cols-12" key={i}>
                                 <div className="col-span-1 px-5 text-left border-t py-2">{item.id}</div>
                                 <div className="col-span-3 px-5 text-left border-t py-2">{getDate(item.tanggal)}</div>
-                                <div className="col-span-4 px-5 text-left border-t py-2">{getTime(item.tanggal)}</div>
-                                <div className="col-span-4 px-5 text-left border-t py-2">{stasiun === 'Cendono' ? item.curah_hujan_cendono : item.curah_hujan_lawang}</div>
+                                <div className="col-span-3 px-5 text-left border-t py-2">{getTime(item.tanggal)}</div>
+                                <div className="col-span-3 px-5 text-left border-t py-2">
+                                    {stasiun === 'Cendono' ? 
+                                        (item.curah_hujan_cendono < 0.6 ? 'Hujan Ringan' : (item.curah_hujan_cendono < 2.0 ? 'Hujan Sedang' : 'Hujan Lebat')): 
+                                        (item.curah_hujan_lawang < 0.6 ? 'Hujan Ringan' : (item.curah_hujan_lawang < 2.0 ? 'Hujan Sedang' : 'Hujan Lebat'))
+                                    }
+                                </div>
+                                <div className="col-span-2 px-5 text-left border-t py-2">{stasiun === 'Cendono' ? item.curah_hujan_cendono : item.curah_hujan_lawang}</div>
                             </div>
                         ))
                     }

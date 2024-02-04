@@ -53,30 +53,30 @@ const UserTable = ({user}) => {
         setUpdate(false)
     }, [update])
 
-    return ( 
+    return (
         <div className="text-left">
-            {openModal && modalType}
-            <p className="font-semibold text-xl text-left my-3">Tabel Kontak</p>
-            <button onClick={() => handleOpenModal('add')}
-            className="text-sm rounded-md bg-black hover:bg-gray-700 text-white text-center px-5 py-1">Tambah Kontak</button>
-            <div className="grid grid-cols-10 my-3 border rounded-lg shadow text-center">
-                <div className="col-span-1 font-semibold py-2 text-sm border-b">ID</div>
-                <div className="col-span-3 font-semibold py-2 text-sm border-b">Nama</div>
-                <div className="col-span-3 font-semibold py-2 text-sm border-b">Nomor Telepon</div>
-                <div className="col-span-3 font-semibold py-2 text-sm border-b">Aksi</div>
+            {/*{openModal && modalType}*/}
+            {/*<p className="font-semibold text-xl text-left my-3">Tabel Kontak</p>*/}
+            {/*<button onClick={() => handleOpenModal('add')}*/}
+            {/*className="text-sm rounded-md bg-black hover:bg-gray-700 text-white text-center px-5 py-1">Tambah Kontak</button>*/}
+            {/*<div className="grid grid-cols-10 my-3 border rounded-lg shadow text-center">*/}
+            {/*    <div className="col-span-1 font-semibold py-2 text-sm border-b">ID</div>*/}
+            {/*    <div className="col-span-3 font-semibold py-2 text-sm border-b">Nama</div>*/}
+            {/*    <div className="col-span-3 font-semibold py-2 text-sm border-b">Nomor Telepon</div>*/}
+            {/*    <div className="col-span-3 font-semibold py-2 text-sm border-b">Aksi</div>*/}
 
-                {users.map(item => (
-                    <div className="col-span-10 grid grid-cols-10" key={item.id}>
-                        <div className="col-span-1 border-b text-sm py-1">{item.id}</div>
-                        <div className="col-span-3 border-b text-sm py-1">{item.nama_kontak}</div>
-                        <div className="col-span-3 border-b text-sm py-1">{item.no_telp}</div>
-                        <div className="col-span-3 border-b text-sm py-1 flex-wrap flex justify-center">
-                            <button onClick={() => handleOpenModal('update', {nama:item.nama_kontak, nohp:item.no_telp, id: item.id})}
-                            className="text-sm rounded-md bg-black hover:bg-gray-700 text-white text-center px-5 py-1">Edit</button>
-                        </div>
-                    </div>
-                ))}
-            </div>
+            {/*    {users.map(item => (*/}
+            {/*        <div className="col-span-10 grid grid-cols-10" key={item.id}>*/}
+            {/*            <div className="col-span-1 border-b text-sm py-1">{item.id}</div>*/}
+            {/*            <div className="col-span-3 border-b text-sm py-1">{item.nama_kontak}</div>*/}
+            {/*            <div className="col-span-3 border-b text-sm py-1">{item.no_telp}</div>*/}
+            {/*            <div className="col-span-3 border-b text-sm py-1 flex-wrap flex justify-center">*/}
+            {/*                <button onClick={() => handleOpenModal('update', {nama:item.nama_kontak, nohp:item.no_telp, id: item.id})}*/}
+            {/*                className="text-sm rounded-md bg-black hover:bg-gray-700 text-white text-center px-5 py-1">Edit</button>*/}
+            {/*            </div>*/}
+            {/*        </div>*/}
+            {/*    ))}*/}
+            {/*</div>*/}
         </div>
      );
 }
@@ -112,5 +112,5 @@ const FormUser = ({nama, nohp, id, type, handler}) => {
         </div>
     )
 }
- 
+
 export default UserTable;

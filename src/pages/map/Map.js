@@ -30,10 +30,10 @@ const Map = () => {
     }
     const defaultProps = {
         center: {
-          lat: -7.724863 ,
+          lat: -7.764863 ,
           lng: 112.760337
         },
-        zoom: 11.5
+        zoom: 11
       };
 
     const handleApiLoaded = (map, maps) => {
@@ -46,7 +46,8 @@ const Map = () => {
                 <p className="text-3xl font-semibold text-left my-3">FLOOD FORECASTING AND WARNING SYSTEM</p>
                 <p className="text-sm italic mb-5">Sistem Peramalan dan Peringatan Banjir</p>
             </div>
-            <div className="w-full h-[600px]">
+            <p className="text-sm text-black italic mt-5 font-semibold">Petunjuk :  untuk melihat peramalan dan peringatan dini di stasiun monitoring, silakan klik titik stasiun monitoring yang diinginkan</p>
+            <div className="w-full h-[45%]">
                 <GoogleMapReact
                     bootstrapURLKeys={{ key: process.env.REACT_APP_MAP_API_KEY }}
                     defaultCenter={defaultProps.center}
@@ -59,7 +60,14 @@ const Map = () => {
                     ))}
                 </GoogleMapReact>
             </div>
-            <p className="text-sm text-black italic mt-5 font-semibold">Petunjuk :  untuk melihat peramalan dan peringatan dini di stasiun monitoring, silakan klik titik stasiun monitoring yang diinginkan</p>
+            <div className="flex flex-row">
+            <div className="w-[40%] h-[40%]">
+                <img src="Hilir.gif" alt="" className="w-full object-contain"/>
+            </div>
+            <div className="w-[40%] h-[40%]">
+                <img src="Hulu.gif" alt="" className="w-full object-contain"/>
+            </div>
+            </div>
         </>
      );
 }

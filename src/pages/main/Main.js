@@ -162,7 +162,7 @@ const Main = () => {
                         </div>
                         <p className="font-semibold text-sm text-left">Gambar Sungai Stasiun {stasiun}</p>
                         <div className="rounded-lg overflow-hidden m-3">
-                            <img src="/Gambar_sungai.jpeg" alt="" className="w-full h-full object-contain"/>
+                            <img src="/ffwsview/Gambar_sungai.jpeg" alt="" className="w-full h-full object-contain"/>
                         </div>
                     </div>
                     }
