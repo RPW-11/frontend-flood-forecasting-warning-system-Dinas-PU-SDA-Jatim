@@ -117,7 +117,7 @@ const Main = () => {
                         </div>
                         <p className="font-light text-xs text-left mt-3">Atur komponen prediksi dengan menekan tombol pada masing-masing opsi konfigurasi.</p>
                         <div className="flex flex-wrap mt-3">
-                            <div className="relative text-left w-[150px] rounded-lg px-3 py-2 bg-blue-100 ml-3">
+                            {/* <div className="relative text-left w-[150px] rounded-lg px-3 py-2 bg-blue-100 ml-3">
                                 <div className="flex items-center">
                                     <MdEngineering/>
                                     <p className="text-sm font-semibold ml-1">Model</p>
@@ -131,7 +131,7 @@ const Main = () => {
                                     <li onClick={() => modelHandler('LSTM')} className="p-2 cursor-pointer hover:bg-zinc-500">LSTM</li>
                                     <li onClick={() => modelHandler('TCN')} className="p-2 cursor-pointer hover:bg-zinc-500">TCN</li>
                                 </ul>}
-                            </div>
+                            </div> */}
                             <div className="relative text-left w-[150px] rounded-lg px-3 py-2 bg-lime-100 ml-3">
                                 <div className="flex items-center">
                                     <IoIosTimer />

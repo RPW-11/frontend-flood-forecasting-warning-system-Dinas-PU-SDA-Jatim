@@ -88,18 +88,44 @@ const Map = () => {
       "Undefined": 'bg-white'
     }
 
-    const getStatus = (value, stasiunLimitAir, item) => {
+    const colorMapCurahHujan = {
+      'Tidak Hujan': 'bg-green-200 group-hover:bg-green-400',
+      'Sangat Ringan': 'bg-aqua-400 group-hover:bg-aqua-600',
+      'Ringan': 'bg-blue-400 group-hover:bg-blue-600',
+      'Sedang': 'bg-yellow-400 group-hover:bg-yellow-600',
+      'Lebat': 'bg-orange-400 group-hover:bg-orange-600',
+      'Sangat Lebat': 'bg-red-400 group-hover:bg-red-600',
+    }
+
+    const getStatus = (value, stasiunLimitAir) => {
       if (!stasiunLimitAir) {
         return "Undefined"
       }
       return value <= stasiunLimitAir[0] ? "Aman" : value > stasiunLimitAir[0] && value < stasiunLimitAir[1] ? "Siaga" : value >= stasiunLimitAir[1] ? "Bahaya" : "Undefined"
     }
 
+    const getStatusCurahHujan = (value) => {
+      if (value >= 20)
+        return "Sangat Lebat"
+      else if (value >= 10)
+        return "Lebat"
+      else if (value >= 5)
+        return "Sedang"
+      else if (value >= 1)
+        return "Ringan"
+      else if (value >= 0.1)
+        return "Sangat Ringan"
+      else
+        return "Tidak Hujan"
+    }
+
     const [loading, setIsLoading] = useState(true);
     const [aktualData, setAktualData] = useState({});
     const [limitAir, setLimitAir] = useState({});
     const {getChartData} = useStatistic();
-    const {getStasiunLimitAir} = useGetData();
+    const {getStasiunLimitAir, getSensorHistory} = useGetData();
+
+    console.log(aktualData);
 
     useEffect(() => {
       const loadData = async () => {
@@ -110,7 +136,7 @@ const Map = () => {
   
             // check if awlr or arr
             if (typ === "AWLR") {
-              const res = await getChartData("def", "lstm", stasiunName, 5)
+              const res = await getChartData("def", stasiunName === "Dhompo" ? "lstm" : "gru", stasiunName, 5)
               const resLimitAir = await getStasiunLimitAir("def", stasiunName === "Dhompo" ? 1 : 2)
               const {batas_air_siaga, batas_air_awas} = resLimitAir.data || [-1, -1]
               let newLimitAir = limitAir
@@ -130,7 +156,12 @@ const Map = () => {
               newData[item] = aktual
               setAktualData(newData)
             } else {
-
+              let res = await getSensorHistory("def", 0, 1, stasiunName)
+              res = res.data.history[0]
+              
+              let newData = aktualData
+              newData[item] = stasiunName === "Cendono" ? res.curah_hujan_cendono : res.curah_hujan_lawang;
+              setAktualData(newData)
             }
           })
         )
@@ -157,16 +188,37 @@ const Map = () => {
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
                     {!loading && Object.keys(stasiun).map((item, i) => (
-                        <EnhancedMarker position={stasiun[item]} key={i} icon={<MarkerCustom text={item} color={colorMapStatus[getStatus(aktualData[item], limitAir[item], item)]}/>}/>
+                        <EnhancedMarker position={stasiun[item]} key={i} icon={
+                          item.startsWith("ARR") ? 
+                          <MarkerCustom text={item} color={colorMapCurahHujan[getStatusCurahHujan(aktualData[item])]}/>
+                          :
+                        <MarkerCustom text={item} color={colorMapStatus[getStatus(aktualData[item], limitAir[item])]}/>
+                      }/>
                     ))}
                 </MapContainer>
             </div>
             <div className="flex flex-row">
-                <div className="w-[40%] h-[40%]">
-                    <img src="Hilir.gif" alt="" className="w-full object-contain"/>
+                <div className='w-[80%]'>
+                  <p className='text-lg font-semibold'> Simulasi penelusuran banjir DAS Welang</p>
+                  <div className="flex flex-row">
+                    <div className="w-[50%]">
+                        <img src="Hilir.gif" alt="" className="w-full object-contain"/>
+                    </div>
+                    <div className="w-[50%]">
+                        <img src="Hulu.gif" alt="" className="w-full object-contain"/>
+                    </div>
+                  </div>
                 </div>
-                <div className="w-[40%] h-[40%]">
-                    <img src="Hulu.gif" alt="" className="w-full object-contain"/>
+                <div className='p-5'>
+                  <p className="font-semibold py-3">Keterangan pada Peta</p>
+                      <div className="flex items-center">
+                        <div className="w-[50px] h-[20px] border-2 border-black mx-1"></div>
+                        <p>Curah Hujan</p>
+                      </div>
+                      <div className="flex items-center my-3">
+                        <div className="w-[50px] h-[20px] border-2 rounded-full border-black mx-1"></div>
+                        <p>Air Sungai</p>
+                      </div>
                 </div>
             </div>
         </>

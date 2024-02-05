@@ -130,7 +130,7 @@ const Graph = ({params, setters}) => {
     useEffect(() => {
         const handleLoadChartData = async () => {
             const token = user ? user.authorization.token : 'def'
-            const res = await getChartData(token, model, daerah, periode);
+            const res = await getChartData(token, daerah.toLowerCase() === "dhompo" ? "LSTM" : "GRU", daerah, periode);
             let tempPred = []
             let tempAct = []
             let tempDate = []
